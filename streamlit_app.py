@@ -2,8 +2,9 @@
 import streamlit as st
 from snowflake.snowpark.functions import col, when_matched
 
+cnx = st.connection("snowflake")
+session = cnx.session()
 
-from snowflake.snowpark.context import get_active_session
 
 # Write directly to the app
 st.title(f"Pending Orders :balloon: {st.__version__}")
@@ -15,8 +16,6 @@ st.write(
   """
 )
 
-
-session = get_active_session()
 pendingorders_dataframe = session.table("smoothies.public.orders").filter(col("ORDER_FILLED")==0).collect()
 
 if pendingorders_dataframe:
